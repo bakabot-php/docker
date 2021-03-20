@@ -46,6 +46,11 @@ ENTRYPOINT ["/usr/local/bin/docker-php-entrypoint"]
 # php dev image - includes xdebug and dev config for php + opcache
 FROM php-prod AS php-dev
 
+RUN apt update \
+    && apt install -y --no-install-recommends \
+        git \
+    && rm -rf /var/cache/apt/*
+
 COPY ./config/dev/conf.d/* /usr/local/etc/php/conf.d/
 
 USER app
