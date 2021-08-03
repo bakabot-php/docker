@@ -3,7 +3,6 @@ FROM php:8.0-cli AS php-prod
 
 ARG GROUP_ID=1000
 ARG USER_ID=1000
-
 ARG WAIT_VERSION=2.7.3
 
 ADD https://github.com/ufoscout/docker-compose-wait/releases/download/${WAIT_VERSION}/wait /usr/local/bin/wait
@@ -17,6 +16,11 @@ RUN set -eux; \
     && adduser --no-create-home --disabled-password --gecos "" --uid "${USER_ID}" --gid "${GROUP_ID}" app \
     && chown -R app:app /app \
     && sync \
+    && apt-get update \
+    && apt-get install -y --no-install-recommends \
+        locales \
+    && sed -i 's/# en_US.UTF-8 UTF-8/en_US.UTF-8 UTF-8/' /etc/locale.gen \
+    && locale-gen en_US.UTF-8 \
     && install-php-extensions \
         mysqli \
         opcache \
@@ -30,10 +34,12 @@ RUN set -eux; \
     && rm /usr/local/etc/php/conf.d/*.ini \
     && rm -rf \
         /tmp/* \
-        /usr/local/bin/install-php-extensions
+        /usr/local/bin/install-php-extensions \
+        /var/cache/apt/*
 
 COPY ./docker-php-entrypoint /usr/local/bin/docker-php-entrypoint
 COPY ./config/prod/php.ini /usr/local/etc/php/php.ini
+COPY ./config/prod/setlocale.php /usr/local/etc/php/setlocale.php
 COPY ./config/prod/conf.d/* /usr/local/etc/php/conf.d/
 
 VOLUME ["/app"]
