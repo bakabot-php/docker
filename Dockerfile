@@ -42,6 +42,12 @@ COPY ./config/prod/php.ini /usr/local/etc/php/php.ini
 COPY ./config/prod/setlocale.php /usr/local/etc/php/setlocale.php
 COPY ./config/prod/conf.d/* /usr/local/etc/php/conf.d/
 
+ENV LANG="en_US.UTF-8" \
+    LANGUAGE="en_US.UTF-8" \
+    LC_ALL="en_US.UTF-8" \
+    HOME="/tmp" \
+    TZ="UTC"
+
 VOLUME ["/app"]
 
 WORKDIR /app
