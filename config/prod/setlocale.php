@@ -1,3 +1,4 @@
 <?php
 
-setlocale(LC_ALL, 'en_US.UTF-8');
+date_default_timezone_set(getenv('TZ'));
+setlocale(LC_ALL, getenv('LC_ALL'));
