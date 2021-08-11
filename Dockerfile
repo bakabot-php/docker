@@ -27,6 +27,7 @@ RUN set -eux; \
         mysqli \
         opcache \
         pcntl \
+        pcov \
         pdo_mysql \
         pdo_pgsql \
         redis \
